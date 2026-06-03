@@ -1,34 +1,39 @@
 import "./App.css";
 import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cart from "./components/Cart";
 
-function App() {
-  const products = [
-    {
-      id: 1,
-      name: "Laptop",
-      price: 800,
-    },
-    {
-      id: 2,
-      name: "Mouse",
-      price: 20,
-    },
-    {
-      id: 3,
-      name: "Keyboard",
-      price: 50,
-    },
-    {
-      id: 4,
-      name: "Headphones",
-      price: 120,
-    },
-  ];
+const API_URL = "https://fakestoreapi.com";
 
+function App() {
   const [cart, setCart] = useState([]);
+
+  const [products, setProducts] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await fetch(`${API_URL}/products`);
+
+      const data = await response.json();
+
+      setProducts(data);
+    } catch (error) {
+      setError("Something went wrong.Try again", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product) => {
     setCart([...cart, product]);
@@ -49,25 +54,36 @@ function App() {
         subtitle="Practice React with a simple shopping cart"
       />
 
-      <h2>Products</h2>
+      {products.length === 0 ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          <h2>Products</h2>
 
-      <div className="products-list">
-        {products.map((product) => {
-          const isInCart = cart.some(
-            (productInCart) => productInCart.id === product.id,
-          );
+          {loading ? (
+            <p>Loading products...</p>
+          ) : (
+            <div className="products-list">
+              {products.map((product) => {
+                const isInCart = cart.some(
+                  (productInCart) => productInCart.id === product.id,
+                );
 
-          return (
-            <ProductCard
-              key={product.id}
-              name={product.name}
-              price={product.price}
-              onAddToCart={() => handleAddToCart(product)}
-              isInCart={isInCart}
-            />
-          );
-        })}
-      </div>
+                return (
+                  <ProductCard
+                    key={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.image}
+                    onAddToCart={() => handleAddToCart(product)}
+                    isInCart={isInCart}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
 
       <div className="cart">
         <Cart

@@ -9,7 +9,7 @@ function Cart({ cart, onRemoveFromCart, onClearCart }) {
           return (
             <div className="cart-item" key={productCart.id}>
               <p>
-                {productCart.name} - {productCart.price}€
+                {productCart.title} - {productCart.price}€
               </p>
 
               <button onClick={() => onRemoveFromCart(productCart.id)}>
@@ -20,7 +20,10 @@ function Cart({ cart, onRemoveFromCart, onClearCart }) {
         })
       )}
 
-      <h2>Totali: {cart.reduce((acc, product) => acc + product.price, 0)}€</h2>
+      <h2>
+        Totali:{" "}
+        {cart.reduce((acc, product) => acc + product.price, 0).toFixed(2)}€
+      </h2>
 
       <button onClick={onClearCart}>Clear Cart</button>
     </>

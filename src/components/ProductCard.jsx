@@ -1,7 +1,9 @@
-function ProductCard({ name, price, onAddToCart, isInCart }) {
+function ProductCard({ title, price, image, onAddToCart, isInCart }) {
   return (
     <div className="product-card">
-      <h3>{name}</h3>
+      <img src={image} className="product-card-img" />
+
+      <h3>{title}</h3>
 
       <p>Price: {price}€</p>
 
