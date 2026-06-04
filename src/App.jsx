@@ -85,13 +85,17 @@ function App() {
         </>
       )}
 
-      <div className="cart">
-        <Cart
-          cart={cart}
-          onRemoveFromCart={(id) => handleRemoveFromCart(id)}
-          onClearCart={() => handleClearCart()}
-        />
-      </div>
+      {cart.length !== 0 && (
+        <div className="cart-section">
+          <div className="cart">
+            <Cart
+              cart={cart}
+              onRemoveFromCart={(id) => handleRemoveFromCart(id)}
+              onClearCart={() => handleClearCart()}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
